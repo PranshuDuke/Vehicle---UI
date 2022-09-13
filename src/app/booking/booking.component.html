@@ -1,0 +1,305 @@
+<div class="dashboard-container-wrap">
+    <div class="dashboard-container">
+        <div class="side-container-wrap">
+            <ul class="side-container" id="mydiv">
+                <li class="listMenuChild active">Booking</li>
+                <li class="listMenuChild" (click)="handelDriver()">Driver</li>
+                <li class="listMenuChild" (click)="handelVechile()">Vehicle</li>
+            </ul>
+
+        </div>
+        <div class="main-container-wrap">
+            <div class="main-container">
+                <div class="heading_wrap">
+                    <div class="heading">Booking Data</div>
+                    <div class="row end-xs mt-1">
+                      <div class="input-group rounded">
+                        <!--<div class="col-xs-12">-->
+                          <input type="text" class="form-control rounded" placeholder="Search Bookings" aria-label="Search" aria-describedby="search-addon" [(ngModel)]="filterString"
+                          (keyup)="filterBooking()" />
+                        </div>
+                      </div>
+                    <div class="heading">
+                        <button *ngIf="role === 'admin'" type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">
+                            Add Booking
+                        </button>
+
+                    </div>
+                </div>
+                <table>
+                    <tr>
+
+                        <th>Booking_ID</th>
+                        <th>Vehicle</th>
+                        <th>Driver</th>
+                        <th>From Location</th>
+                        <th>To Location</th>
+                        <th>Type</th>
+                        <th>TripFare</th>
+                        <th>Distance</th>
+                        <th>Fuel Expense</th>
+                        <th>Driver Share</th>
+                        <th>Remarks</th>
+                        <th *ngIf="role === 'admin'">Edit</th>
+                        <!-- <th>Delete</th> -->
+                    </tr>
+                    <tr *ngFor="let datas of bookingsData ;let i = index">
+                        <td>{{datas.bookingID}}</td>
+                        <td>{{datas.vehicle}}</td>
+                        <td>{{datas.driver}}</td>
+                        <td>{{datas.fromLocation}}</td>
+                        <td>{{datas.toLocation}}</td>
+                        <td>{{datas.type}}</td>
+                        <td>{{datas.tripFare}}</td>
+                        <td>{{datas.distance}}</td>
+                        <td>{{datas.fuelExpense}}</td>
+                        <td>{{datas.driverShare}}</td>
+                        <td>{{datas.remarks}}</td>
+                        <td *ngIf="role === 'admin'" class="edit"  style="cursor:pointer;">
+                            <mat-icon data-bs-toggle="modal"
+                            (click)="updatebookingdata(datas)"
+                            data-bs-target="#exampleModalupdate">edit</mat-icon>
+                        </td>
+                        <!--  (click)="updatevehicledata(datas) -->
+                        <!-- <td (click)="deleteBookingdata(datas)" style="cursor:pointer;">
+                            <mat-icon>delete</mat-icon>
+                        </td> -->
+                    </tr>
+
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<div class="model_outer_contain">
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add New Booking</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+
+                <div class="modal-body">
+
+                    <!-- <div class="input-text">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Booking ID</mat-label>
+                            <input matInput placeholder="Booking ID" type="text"
+                                (keyup)="handelBooking_No($event)">
+
+                        </mat-form-field>
+                    </div>  -->
+                    <div class="input-text">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Vehicle</mat-label>
+                            <input matInput placeholder="Vehicle" type="text"
+                                (keyup)="handelVehicle($event)">
+
+                        </mat-form-field>
+                    </div>
+                    <div class="input-text">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Driver</mat-label>
+                            <input matInput placeholder="Driver" type="text"
+                                (keyup)="handelDrivers($event)">
+
+                        </mat-form-field>
+                    </div>
+                    <div class="input-text">
+                        <mat-form-field appearance="outline">
+                            <mat-label>From Location</mat-label>
+                            <input matInput placeholder="From Location" type="text"
+                                [(ngModel)]="FromLocationU" />
+                        </mat-form-field>
+                    </div>
+                    <div class="input-text">
+                        <mat-form-field appearance="outline">
+                            <mat-label>To Location</mat-label>
+                            <input matInput placeholder="To Location" type="text"
+                            [(ngModel)]="ToLocationU" />
+                        </mat-form-field>
+                    </div>
+                    <div class="input-text">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Trip Fare</mat-label>
+                            <input matInput placeholder="Trip Fare" type="number"
+                                [(ngModel)]="TriFareU">
+
+                        </mat-form-field>
+                    </div>
+                    <div class="input-text">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Distance</mat-label>
+                            <input matInput placeholder="Distance" type="number"
+                                [(ngModel)]="DistanceU">
+                        </mat-form-field>
+                    </div>
+                    <div class="input-text">
+                        <select [(ngModel)]="bokingType">
+                            <option value="" selected disabled>Choose type</option>
+                            <option *ngFor="let type of bookingTypes" value="{{type}}">
+                                {{type}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="input-text">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Fuel Expense</mat-label>
+                            <input matInput placeholder="Fuel Expense" type="number"
+                                [(ngModel)]="FuelExpenseU">
+                        </mat-form-field>
+                    </div>
+                    <div class="input-text">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Driver Share</mat-label>
+                            <input matInput placeholder="Driver Share" type="number"
+                            [(ngModel)]="DriverShareU">
+                        </mat-form-field>
+                    </div>
+                    <div class="input-text">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Remarks</mat-label>
+                            <input matInput placeholder="Remarks" type="text"
+                            [(ngModel)]="RemarksU">
+                        </mat-form-field>
+                    </div>
+
+                    <!-- <div class="input-text">
+                        <mat-form-field class="example-form-field" appearance="fill">
+                            <mat-label>Booking Dates</mat-label>
+                            <mat-date-range-input
+                                [formGroup]="campaignOne"
+                                [rangePicker]="bookingDates"
+                                [comparisonStart]="campaignOne.value.start"
+                                [comparisonEnd]="campaignOne.value.end">
+                                <input matStartDate placeholder="Start date" formControlName="start">
+                                <input matEndDate placeholder="End date" formControlName="end">
+                            </mat-date-range-input>
+                            <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matSuffix [for]="bookingDates"></mat-datepicker-toggle>
+                            <mat-date-range-picker #bookingDates></mat-date-range-picker>
+                          </mat-form-field>
+                    </div> -->
+                    <button type="button" class="btn btn-primary " data-bs-dismiss="modal" aria-label="Close" (click)="handelAddBooking()">
+                        Add Booking
+                    </button>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="model_outer_contain">
+    <div class="modal fade" id="exampleModalupdate" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Update Booking</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+
+                <div class="modal-body">
+
+                    <div class="input-text">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Booking No</mat-label>
+                            <input matInput placeholder="Registration_No" type="text"
+                            [(ngModel)]="BookingIDU">
+
+                        </mat-form-field>
+                    </div>
+                    <div class="input-text">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Vehicle</mat-label>
+                            <input matInput placeholder="Model_Name" type="text"
+                            [(ngModel)]="VehicleU">
+                                <!-- (keyup)="handelVehicleU($event)"> -->
+
+                        </mat-form-field>
+                    </div>
+                    <div class="input-text">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Driver</mat-label>
+                            <input matInput placeholder="Vehicle_Type" type="text"
+                            [(ngModel)]="DriverU">
+
+                        </mat-form-field>
+                    </div>
+                    <div class="input-text">
+                        <mat-form-field appearance="outline">
+                            <mat-label>From Location</mat-label>
+                            <input matInput placeholder="From Location" type="text"
+                                [(ngModel)]="FromLocationU" />
+                        </mat-form-field>
+                    </div>
+                    <div class="input-text">
+                        <mat-form-field appearance="outline">
+                            <mat-label>To Location</mat-label>
+                            <input matInput placeholder="To Location" type="text"
+                            [(ngModel)]="ToLocationU" />
+                        </mat-form-field>
+                    </div>
+                    <div class="input-text">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Trip Fare</mat-label>
+                            <input matInput placeholder="Number_Of_Seat" type="number"
+                            [(ngModel)]="TriFareU">
+
+                        </mat-form-field>
+                    </div>
+                    <div class="input-text">
+                        <select [(ngModel)]="bokingType" [value]="bokingType">
+                            <option value="" disabled>Choose type</option>
+                            <option *ngFor="let type of bookingTypes" value="{{type}}">
+                                {{type}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="input-text">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Distance</mat-label>
+                            <input matInput placeholder="AC_Available" type="number"
+                            [(ngModel)]="DistanceU">
+
+                        </mat-form-field>
+                    </div>
+                    <div class="input-text">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Fuel Expense</mat-label>
+                            <input matInput placeholder="Fuel Expense" type="number"
+                                [(ngModel)]="FuelExpenseU">
+                        </mat-form-field>
+                    </div>
+                    <div class="input-text">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Driver Share</mat-label>
+                            <input matInput placeholder="Driver Share" type="number"
+                            [(ngModel)]="DriverShareU">
+                        </mat-form-field>
+                    </div>
+                    <div class="input-text">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Remarks</mat-label>
+                            <input matInput placeholder="Remarks" type="text"
+                            [(ngModel)]="RemarksU">
+                        </mat-form-field>
+                    </div>
+                    <button type="button" class="btn btn-primary " data-bs-dismiss="modal" aria-label="Close"
+                        (click)="handelUpdateBooking()">
+                        Update Booking
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
